@@ -1,2 +1,2 @@
-[[julia.png]]
+![graph](julia.png)
 
