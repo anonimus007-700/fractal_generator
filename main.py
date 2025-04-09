@@ -1,5 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import ctypes
+
+lib = ctypes.CDLL('./lib.so')
+
+julia_qud = lib.julia_quadratic
+julia_qud.argtypes = [
+        ctypes.c_double, ctypes.c_double,
+        ctypes.c_double, ctypes.c_double,
+        ctypes.c_int
+]
+julia_qud.restype = ctypes.c_int
 
 x_start, y_start = -2, -2
 width, height = 4, 4
@@ -35,7 +46,10 @@ cx, cy = r * np.cos(a), r * np.sin(a)
 
 for i in range(len(im)):
     for j in range(len(re)):
-        X[i, j] = julia_quadratic(re[j], im[i], cx, cy, threshold)
+        print(julia_qud(re[j], im[i], cx, cy, threshold), im[i], re[j], cx, cy)
+        print()
+        # X[i, j] = julia_quadratic(re[j], im[i], cx, cy, threshold)
+        X[i, j] = julia_qud(re[j], im[i], cx, cy, threshold)
 
 img = plt.imshow(X, interpolation="bicubic", cmap='hot')
 plt.axis('off')  # turn off the axis
